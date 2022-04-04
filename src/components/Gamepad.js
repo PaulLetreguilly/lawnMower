@@ -62,9 +62,15 @@ const Gamepad = ({
 
   return (
     <div>
-      <button onClick={leftDirection}>G</button>
-      <button onClick={forward}>A</button>
-      <button onClick={rightDirection}>D</button>
+      <button onClick={leftDirection} className="btn gamepad">
+        G
+      </button>
+      <button onClick={forward} className="btn gamepad">
+        A
+      </button>
+      <button onClick={rightDirection} className="btn gamepad">
+        D
+      </button>
     </div>
   );
 };

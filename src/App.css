@@ -1,5 +1,83 @@
-/* Other rules */
+body {
+  margin: 0 auto;
+}
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.container {
+  width: 90%;
+  margin: 5% 2%;
+}
+.ctn-lawn {
+  margin: 2.5% 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.lawn {
+  background-color: lightgreen;
+  border: black solid 0.0125rem;
+  padding: 40px;
+}
+.ctn-lawn {
+  width: 100%;
+}
+.y-axis {
+  display: flex;
+}
+
+.mwr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mower {
+  width: 82.75px;
+  width: 82.75px;
+  background-color: lightgreen;
+  border: black solid 0.0125rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.red {
+  color: red;
+}
+.blue {
+  color: blue;
+}
+.ctn-form {
+  display: flex;
+  margin: 2.5% 0;
+}
+.drop {
+  border: 0.0125rem solid black;
+  /* width: 100%; */
+  padding: 0.375rem;
+  text-align: center;
+}
+.down {
+  position: absolute;
+  border-left: black 0.0125rem solid;
+  border-right: black 0.0125rem solid;
+  /* border-bottom: black 0.0125rem solid; */
+  width: 100%;
+  text-align: center;
+}
+.drop-elem {
+  border-bottom: black 0.0125rem solid;
+}
+.drop:hover,
+.drop-elem:hover,
+.btn:hover {
+  cursor: pointer;
+}
+.drop-elem:hover {
+  background-color: lightgray;
+}
+.gamepad {
+  margin: 0 2%;
+  padding: 0.5%;
+}
+.gamepad:hover {
+  opacity: 0.5;
+}

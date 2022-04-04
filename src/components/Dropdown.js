@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 
-const Dropdown = ({ onChange, option }) => {
+const Dropdown = ({ onChange }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -15,18 +15,22 @@ const Dropdown = ({ onChange, option }) => {
     }
   };
 
+  const option = [{ name: "N" }, { name: "E" }, { name: "S" }, { name: "W" }];
+
   return (
-    <div>
-      <div onClick={() => setOpen(!open)}>
+    <div style={{ position: "relative" }}>
+      <div onClick={() => setOpen(!open)} className="drop">
         <div ref={ref}>orientation</div>
       </div>
       <div
         // temporarely using style prop instead of classname, will change once implementing CSS
         style={{ display: open ? "inherit" : "none" }}
+        className="down"
       >
         {option?.map((elem, i) => {
           return (
             <div
+              className="drop-elem"
               key={i}
               onClick={() => {
                 onChange(elem.name);

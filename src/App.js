@@ -1,7 +1,16 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import Dropdown from "./components/Dropdown";
-import Gamepad from "./components/Gamepad";
+import Lawn from "./components/Lawn";
+import Mower from "./components/Mower";
+import MowerDisplay from "./components/MowerDisplay";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faArrowDown,
+  faArrowUp,
+  faArrowLeft,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faArrowDown, faArrowUp, faArrowLeft, faArrowRight);
 
 function App() {
   // size of the lawn
@@ -25,16 +34,7 @@ function App() {
   // used to refresh the page if the lawn's settings are changed
   const [updateLawn, setUpdateLawn] = useState(false);
 
-  // used to hide some component after using them
-  const [hide, setHide] = useState(false);
-
-  // array used with a dropdown to get lawnmowers directions
-  const direction = [
-    { name: "N" },
-    { name: "E" },
-    { name: "S" },
-    { name: "W" },
-  ];
+  const [start, setStart] = useState(false);
 
   // create 2 arrays to generate the lawn with .map() later
   const lawn = (w, h) => {
@@ -68,176 +68,80 @@ function App() {
     return false;
   };
 
+  const mowersSamePosition = (x, y) => {
+    if (mowerOneX === mowerTwoX && mowerOneY === mowerTwoY) {
+      if (mowerTwoX === `${x}` && mowerTwoY === `${y}`) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const lawnSize = { x: 90 / (width + 1), y: 30 / (height + 1) };
+
   return (
-    <main>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          // lawnMower(width, height);
-          setUpdateLawn(!updateLawn);
-        }}
-      >
-        <input
-          type="number"
-          min="0"
-          step="1"
-          // placeholder="lawn width / x"
-          value={width}
-          onChange={(e) => {
-            setWidth(e.target.value);
-          }}
-        />
-        <input
-          type="number"
-          min="0"
-          step="1"
-          // placeholder="lawn heigth / y"
-          value={height}
-          onChange={(e) => {
-            setHeight(e.target.value);
-          }}
-        />
-        <input type="submit" value="start" />
-      </form>
-      <section>
-        {lawnHeight.map((h) => {
-          return (
-            <div key={h}>
-              {lawnWidth.map((w) => {
-                if (mowerOneX === w) {
-                  // console.log(w);
-                }
-                // if (mowerOneX === w && mowerOneY === a) {
-                //   console.log("true");
-                // }
-                // test(w);
-                let a = lawnHeight.length - h - 1;
-                return mowerOne(w, a) ? (
-                  <span key={w * (h + 1)}>
-                    {mowerOneDirection === 0 ? (
-                      <span>a</span>
-                    ) : mowerOneDirection === 1 ? (
-                      <span>b</span>
-                    ) : mowerOneDirection === 2 ? (
-                      <span>c</span>
-                    ) : mowerOneDirection === 3 ? (
-                      <span>d</span>
-                    ) : (
-                      "1"
-                    )}
-                  </span>
-                ) : mowerTwo(w, a) ? (
-                  <span key={w * (h + 1)}>
-                    {mowerTwoDirection === 0 ? (
-                      <span>A</span>
-                    ) : mowerTwoDirection === 1 ? (
-                      <span>B</span>
-                    ) : mowerTwoDirection === 2 ? (
-                      <span>C</span>
-                    ) : mowerTwoDirection === 3 ? (
-                      <span>D</span>
-                    ) : (
-                      "1"
-                    )}
-                  </span>
-                ) : (
-                  <span key={w * (h + 1)}>{/* coord : {w}-{a}/ */}0</span>
-                );
-              })}
-            </div>
-          );
-        })}
+    <main className="container">
+      <Lawn
+        setUpdateLawn={setUpdateLawn}
+        updateLawn={updateLawn}
+        setWidth={setWidth}
+        width={width}
+        setHeight={setHeight}
+        height={height}
+        setStart={setStart}
+      />
+      <section className="ctn-lawn">
+        {start &&
+          lawnHeight.map((h) => {
+            return (
+              <div key={h} className="y-axis">
+                {lawnWidth.map((w) => {
+                  if (mowerOneX === w) {
+                  }
+                  let a = lawnHeight.length - h - 1;
+                  return mowersSamePosition(w, a) ? (
+                    <span key={w * (h + 1)} className="mower">
+                      <MowerDisplay direction={mowerOneDirection} mower={1} />
+                      <MowerDisplay direction={mowerTwoDirection} mower={2} />
+                    </span>
+                  ) : mowerOne(w, a) ? (
+                    <span key={w * (h + 1)} className="mower">
+                      <MowerDisplay direction={mowerOneDirection} mower={1} />
+                    </span>
+                  ) : mowerTwo(w, a) ? (
+                    <span key={w * (h + 1)} className="mower">
+                      <MowerDisplay direction={mowerTwoDirection} mower={2} />
+                    </span>
+                  ) : (
+                    <span
+                      key={w * (h + 1)}
+                      className="lawn"
+                      style={{ width: lawnSize.x, height: lawnSize.y }}
+                    ></span>
+                  );
+                })}
+              </div>
+            );
+          })}
       </section>
-      <form
-        style={{ display: hide ? "none" : "inherit" }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setHide(true);
-          setUpdateLawn(!updateLawn);
-        }}
-      >
-        <h3>lawnmower 1</h3>
-        <input
-          type="number"
-          min="0"
-          step="1"
-          onChange={(e) => setMowerOneX(e.target.value)}
-          value={mowerOneX}
-        />
-        <input
-          type="number"
-          min="0"
-          step="1"
-          onChange={(e) => setMowerOneY(e.target.value)}
-          value={mowerOneY}
-        />
-        <Dropdown
-          option={direction}
-          onChange={(value) => {
-            if (value === "N") {
-              setMowerOneDirection(0);
-            } else if (value === "E") {
-              setMowerOneDirection(1);
-            } else if (value === "S") {
-              setMowerOneDirection(2);
-            } else if (value === "W") {
-              setMowerOneDirection(3);
-            }
-          }}
-        />
-        <h3>lawnmower 2</h3>
-        <input
-          type="number"
-          min="0"
-          step="1"
-          onChange={(e) => setMowerTwoX(e.target.value)}
-          value={mowerTwoX}
-        />
-        <input
-          type="number"
-          min="0"
-          step="1"
-          onChange={(e) => setMowerTwoY(e.target.value)}
-          value={mowerTwoY}
-        />
-        <Dropdown
-          option={direction}
-          onChange={(value) => {
-            if (value === "N") {
-              setMowerTwoDirection(0);
-            } else if (value === "E") {
-              setMowerTwoDirection(1);
-            } else if (value === "S") {
-              setMowerTwoDirection(2);
-            } else if (value === "W") {
-              setMowerTwoDirection(3);
-            }
-          }}
-        />
-        <input type="submit" />
-      </form>
-      <section>
-        <h3>lawnmower 1 gamepad</h3>
-        <Gamepad
-          direction={mowerOneDirection}
-          setDirection={setMowerOneDirection}
-          setX={setMowerOneX}
-          setY={setMowerOneY}
-          x={mowerOneX}
-          y={mowerOneY}
-          maximumX={width}
-          maximumY={height}
-        />
-        <h3>lawnmower 2 gamepad</h3>
-        <Gamepad
-          direction={mowerTwoDirection}
-          setDirection={setMowerTwoDirection}
-          setX={setMowerTwoX}
-          setY={setMowerTwoY}
-          x={mowerTwoX}
-          y={mowerTwoY}
-        />
-      </section>
+      <Mower
+        width={width}
+        height={height}
+        setMowerOneDirection={setMowerOneDirection}
+        setMowerTwoDirection={setMowerTwoDirection}
+        mowerOneDirection={mowerOneDirection}
+        mowerTwoDirection={mowerTwoDirection}
+        setMowerOneX={setMowerOneX}
+        setMowerTwoX={setMowerTwoX}
+        setMowerOneY={setMowerOneY}
+        setMowerTwoY={setMowerTwoY}
+        setUpdateLawn={setUpdateLawn}
+        updateLawn={updateLawn}
+        mowerOneY={mowerOneY}
+        mowerOneX={mowerOneX}
+        mowerTwoX={mowerTwoX}
+        mowerTwoY={mowerTwoY}
+      />
     </main>
   );
 }
